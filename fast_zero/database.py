@@ -12,4 +12,4 @@ def get_session():  # pragma: no cover
     with Session(
         engine
     ) as session:  # cria uma sessão para interagir com o endpoit
-        yield session  # yield garante que a session é fechada corretamente no banco
+        yield session  # yield garante que a session é fechada corretamente no BD
