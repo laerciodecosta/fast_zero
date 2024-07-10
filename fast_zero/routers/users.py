@@ -33,17 +33,19 @@ def create_user(
         if db_user.username == user.username:
             raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST,
-                detail='Username already exist',
+                detail='Username already exists',
             )
         elif db_user.email == user.email:
             raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST,
-                detail='Email already exist',
+                detail='Email already exists',
             )
+    hashed_password = get_password_hash(user.password)
+
     db_user = User(
         username=user.username,
         email=user.email,
-        password=get_password_hash(user.password),
+        password=hashed_password,
     )
     session.add(db_user)
     session.commit()  # valida se essa operação aconteceu
@@ -72,13 +74,12 @@ def update_user(
 ):
     if current_user.id != user_id:
         raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN, detail='Not enough permissions'
+            status_code=HTTPStatus.BAD_REQUEST, detail='Not enough permissions'
         )
 
     current_user.username = user.username
     current_user.password = get_password_hash(user.password)
     current_user.email = user.email
-
     session.commit()
     session.refresh(current_user)
 
@@ -92,7 +93,7 @@ def delete_user(
     current_user: T_CurrentUser,
 ):
     if current_user.id != user_id:
-        raise HTTPException(status_code=400, detail='Not enough permissions')
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='Not enough permissions')
 
     session.delete(current_user)
     session.commit()

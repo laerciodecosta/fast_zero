@@ -70,5 +70,5 @@ def test_delete_wrong__user(client, user, token):
         f'/users/{user.id + 1}',
         headers={'Authorization': f'Bearer {token}'},
     )
-    assert response.status_code == HTTPStatus.FORBIDDEN
-    assert response.json() == {'datail': 'Not enough permissions'}
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {'detail': 'Not enough permissions'}

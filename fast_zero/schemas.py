@@ -25,3 +25,7 @@ class UserList(BaseModel):
 class Token(BaseModel):
     access_token: str  # O token JWT que vamos gerar
     token_type: str  # O modelo que o cliente deve usar para Autorização
+
+
+class TokenData(BaseModel):
+    username: str | None = None
