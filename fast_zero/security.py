@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from jwt import DecodeError, decode, encode
+from jwt import DecodeError, ExpiredSignatureError, decode, encode
 from pwdlib import PasswordHash
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,8 +14,8 @@ from fast_zero.models import User
 from fast_zero.schemas import TokenData
 from fast_zero.settings import Settings
 
-pwd_context = PasswordHash.recommended()
 settings = Settings()
+pwd_context = PasswordHash.recommended()
 
 
 def create_access_token(data: dict):
@@ -49,9 +49,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 async def get_current_user(
     session: Session = Depends(get_session),
-    token: str = Depends(
-        oauth2_scheme
-    ),  # server para garantir que o usuário esteja logado para podor executar alguma operação
+    # server para garantir que o usuário esteja logado para podor executar alguma operação
+    token: str = Depends(oauth2_scheme),
 ):
     credentials_exception = HTTPException(
         status_code=HTTPStatus.UNAUTHORIZED,
@@ -68,6 +67,9 @@ async def get_current_user(
         token_data = TokenData(username=username)
     except DecodeError:
         raise credentials_exception
+    except ExpiredSignatureError:
+        raise credentials_exception
+
     user = session.scalar(
         select(User).where(User.email == token_data.username)
     )
