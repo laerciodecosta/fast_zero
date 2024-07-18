@@ -18,7 +18,8 @@ def client(session):
 
     with TestClient(app) as client:
         app.dependency_overrides[get_session] = (
-            get_session_override  # troca o get_session do banco de prod por um de teste
+            # troca o get_session do banco de prod por um de teste
+            get_session_override
         )
         yield client
 

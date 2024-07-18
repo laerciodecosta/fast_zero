@@ -40,7 +40,6 @@ def login_for_access_token(form_data: T_OAuth2Form, session: T_Session):
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-# fazer o refresh token aula 08
 @router.post('/refresh_token', response_model=Token)
 def refresh_access_token(
     user: User = Depends(get_current_user),

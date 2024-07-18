@@ -28,7 +28,7 @@ def create_user(
         select(User).where(
             (User.username == user.username) | (User.email == user.email)
         )
-    )  # scalar da um select em User onde username é igual ao username recebido no inicio na funcao
+    )  # scalar da um select em User onde username é igual ao username recebido
     if db_user:  # se já existe o user, retorna erro
         if db_user.username == user.username:
             raise HTTPException(
