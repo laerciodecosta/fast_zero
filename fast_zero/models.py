@@ -8,7 +8,7 @@ table_registry = registry()
 
 
 class TodoState(str, Enum):  # define os estados possíveis
-    draf = 'draf'
+    draft = 'draft'
     todo = 'todo'
     doing = 'doing'
     done = 'done'
@@ -42,6 +42,8 @@ class Todo:
     state: Mapped[TodoState]
 
     # Toda tarefa pertence a alguém
-    user_id: Mapped[int] = mapped_column(ForeignKey('user_id'))  # ForeignKey chave estrangeira
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey('users.id')
+    )  # ForeignKey chave estrangeira
 
-#    user: Mapped[User] = relationship(init=False, back_populates='todos')
+    user: Mapped[User] = relationship(init=False, back_populates='todos')

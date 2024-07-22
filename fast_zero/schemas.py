@@ -41,3 +41,8 @@ class TodoSchema(BaseModel):
 
 class TodoPublic(TodoSchema):
     id: int
+#    user_id: int  #  retorna o user
+
+
+class TodoList(BaseModel):
+    todos: list[TodoPublic]
