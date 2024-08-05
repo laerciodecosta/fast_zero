@@ -40,8 +40,12 @@ class Todo:
     title: Mapped[str]
     description: Mapped[str]
     state: Mapped[TodoState]
-    created_at: Mapped[datetime] = mapped_column(init=False, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(init=False, onupdate=func.now(), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, onupdate=func.now(), server_default=func.now()
+    )
 
     # Toda tarefa pertence a alguém
     user_id: Mapped[int] = mapped_column(
